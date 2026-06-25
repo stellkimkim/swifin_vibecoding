@@ -56,8 +56,7 @@ export default function SwipePage() {
     });
 
     addSwipe(currentCard.id, direction, '');
-    x.set(0);
-    controls.set({ x: 0, opacity: 1 });
+    router.push('/report');
   };
 
   // Helper for mock past pattern matching the wireframe UI
