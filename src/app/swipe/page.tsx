@@ -18,11 +18,7 @@ export default function SwipePage() {
 
   const [pendingQueue, setPendingQueue] = useState<Receipt[]>([]);
   const [currentCard, setCurrentCard] = useState<Receipt | null>(null);
-  
-  // Tag selector bottom sheet state
-  const [showTagSelector, setShowTagSelector] = useState(false);
-  const [swipeDirection, setSwipeDirection] = useState<'worth' | 'regret' | null>(null);
-  
+
   // Edit modal state
   const [showEditModal, setShowEditModal] = useState(false);
   const [editStoreName, setEditStoreName] = useState('');
@@ -52,31 +48,16 @@ export default function SwipePage() {
   const handleSwipe = async (direction: 'worth' | 'regret') => {
     if (!currentCard) return;
     triggerHaptic('medium');
-    setSwipeDirection(direction);
 
-    // Animate card off screen
     await controls.start({
       x: direction === 'worth' ? 300 : -300,
       opacity: 0,
       transition: { duration: 0.2 }
     });
 
-    // Show tag selection bottom sheet
-    setShowTagSelector(true);
-  };
-
-  const handleSelectTag = (tag: string) => {
-    if (!currentCard || !swipeDirection) return;
-    triggerHaptic('success');
-    
-    // Save swipe evaluation in Zustand store
-    addSwipe(currentCard.id, swipeDirection, tag);
-
-    // Reset values for next card
+    addSwipe(currentCard.id, direction, '');
     x.set(0);
     controls.set({ x: 0, opacity: 1 });
-    setShowTagSelector(false);
-    setSwipeDirection(null);
   };
 
   // Helper for mock past pattern matching the wireframe UI
@@ -133,10 +114,6 @@ export default function SwipePage() {
     setShowEditModal(false);
     triggerHaptic('success');
   };
-
-  // Tags sets
-  const worthTags = ['😊 행복했음', '💡 가치 있었음', '🔥 꼭 필요했음', '🎉 좋은 경험'];
-  const regretTags = ['😵 충동구매', '💸 너무 비쌌음', '🤷 안 쓰게 됨', '😅 분위기에 휩쓸림'];
 
   return (
     <div className="fixed inset-0 bg-[#FAFAFA] flex flex-col justify-between font-sans z-50 overflow-hidden select-none">
@@ -262,7 +239,7 @@ export default function SwipePage() {
       </div>
 
       {/* Swipe guides */}
-      {currentCard && !showTagSelector && (
+      {currentCard && (
         <div className="flex flex-col items-center gap-4 py-6 border-t border-neutral-100 bg-white select-none">
           <div className="flex justify-center gap-10 items-center">
             {/* Left Button */}
@@ -294,66 +271,6 @@ export default function SwipePage() {
           </button>
         </div>
       )}
-
-      {/* Tag Selector Bottom Sheet Overlay */}
-      <AnimatePresence>
-        {showTagSelector && (
-          <div className="fixed inset-0 bg-black/40 flex items-end justify-center z-50">
-            {/* Click outside to cancel */}
-            <div 
-              className="absolute inset-0 cursor-pointer"
-              onClick={() => {
-                triggerHaptic('light');
-                setShowTagSelector(false);
-                x.set(0);
-                controls.set({ x: 0, opacity: 1 });
-              }}
-            />
-            
-            <motionWeb.div
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
-              transition={{ type: 'spring', damping: 20 }}
-              className="w-full max-w-[412px] bg-white rounded-t-[32px] p-6 shadow-2xl relative z-10 select-none border-t border-neutral-100"
-            >
-              <div className="w-12 h-1 bg-neutral-200 rounded-full mx-auto mb-4 select-none"></div>
-
-              <h3 className="text-center font-extrabold text-neutral-800 text-sm mb-5 break-keep leading-tight">
-                {swipeDirection === 'worth' ? '이 소비가 좋았던 이유는 무엇인가요? 👍' : '이 소비가 아쉬웠던 이유는 무엇인가요? 👎'}
-              </h3>
-
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                {(swipeDirection === 'worth' ? worthTags : regretTags).map((tag) => (
-                  <button
-                    key={tag}
-                    onClick={() => handleSelectTag(tag)}
-                    className={`py-3.5 px-4 text-xs font-bold rounded-2xl border text-center transition-all ${
-                      swipeDirection === 'worth' 
-                        ? 'border-emerald-100 bg-emerald-50/50 hover:bg-emerald-100/50 text-[#22C55E]' 
-                        : 'border-rose-100 bg-rose-50/50 hover:bg-rose-100/50 text-[#EF4444]'
-                    }`}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-
-              <button
-                onClick={() => {
-                  triggerHaptic('light');
-                  setShowTagSelector(false);
-                  x.set(0);
-                  controls.set({ x: 0, opacity: 1 });
-                }}
-                className="w-full py-4 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded-2xl text-xs font-bold transition-all text-center"
-              >
-                태그 없이 선택 완료
-              </button>
-            </motionWeb.div>
-          </div>
-        )}
-      </AnimatePresence>
 
       {/* Edit Modal Dialog */}
       <AnimatePresence>

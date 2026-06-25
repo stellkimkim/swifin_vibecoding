@@ -35,9 +35,7 @@ export default function SnapPage() {
     setIsScanning(true);
     setCapturedImage('mock-receipt-image-url');
 
-    // Simulate OCR delay
     setTimeout(() => {
-      // Pick a random mock receipt result
       const mockOcrResults = [
         { storeName: '스타벅스 신촌점', totalAmount: 4800, category: 'cafe', memo: '모닝 에스프레소' },
         { storeName: '올리브영 홍대점', totalAmount: 24500, category: 'shopping', memo: '보습 크림 구매' },
@@ -49,16 +47,18 @@ export default function SnapPage() {
       const dateStr = now.toISOString().split('T')[0];
       const timeStr = now.toTimeString().split(' ')[0].substring(0, 5);
 
-      setStoreName(result.storeName);
-      setTotalAmount(result.totalAmount);
-      setReceiptDate(dateStr);
-      setReceiptTime(timeStr);
-      setCategory(result.category as any);
-      setMemo(result.memo);
+      addReceipt({
+        store_name: result.storeName,
+        total_amount: result.totalAmount,
+        receipt_date: dateStr,
+        receipt_time: timeStr,
+        category: result.category as any,
+        memo: result.memo,
+      });
 
       setIsScanning(false);
-      setShowResultForm(true);
       triggerHaptic('success');
+      router.push('/report');
     }, 1500);
   };
 
