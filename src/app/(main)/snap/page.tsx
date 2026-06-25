@@ -58,7 +58,7 @@ export default function SnapPage() {
 
       setIsScanning(false);
       triggerHaptic('success');
-      router.push('/report');
+      router.push('/swipe');
     }, 1500);
   };
 
