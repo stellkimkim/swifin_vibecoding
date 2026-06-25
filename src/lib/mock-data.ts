@@ -130,46 +130,6 @@ export const mockReceipts: Receipt[] = [
 
 export const mockSwipes: Swipe[] = [
   {
-    id: 'sw-4',
-    user_id: 'user-123',
-    receipt_id: 'rec-4',
-    direction: 'worth',
-    tag: '💡 가치 있었음',
-    swiped_at: '2026-06-23T08:50:00Z',
-  },
-  {
-    id: 'sw-5',
-    user_id: 'user-123',
-    receipt_id: 'rec-5',
-    direction: 'worth',
-    tag: '🎉 좋은 경험',
-    swiped_at: '2026-06-20T10:30:00Z',
-  },
-  {
-    id: 'sw-6',
-    user_id: 'user-123',
-    receipt_id: 'rec-6',
-    direction: 'worth',
-    tag: '🔥 꼭 필요했음',
-    swiped_at: '2026-06-19T11:20:00Z',
-  },
-  {
-    id: 'sw-7',
-    user_id: 'user-123',
-    receipt_id: 'rec-7',
-    direction: 'worth',
-    tag: '😊 행복했음',
-    swiped_at: '2026-06-18T22:30:00Z',
-  },
-  {
-    id: 'sw-8',
-    user_id: 'user-123',
-    receipt_id: 'rec-8',
-    direction: 'regret',
-    tag: '😅 분위기에 휩쓸림',
-    swiped_at: '2026-06-17T21:30:00Z',
-  },
-  {
     id: 'sw-9',
     user_id: 'user-123',
     receipt_id: 'rec-9',
