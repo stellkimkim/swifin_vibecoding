@@ -56,7 +56,14 @@ export default function SwipePage() {
     });
 
     addSwipe(currentCard.id, direction, '');
-    router.push('/report');
+
+    const remaining = getPendingSwipes().filter((r) => r.id !== currentCard.id);
+    if (remaining.length === 0) {
+      router.push('/report');
+    } else {
+      x.set(0);
+      controls.set({ x: 0, opacity: 1 });
+    }
   };
 
   // Helper for mock past pattern matching the wireframe UI
